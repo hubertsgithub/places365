@@ -41,7 +41,7 @@ model.load_state_dict(state_dict)
 model.eval()
 
 # Check if GPUs are available
-if os.envinron.get('CUDA_VISIBLE_DEVICES', "") != "" and torch.cuda.is_available():
+if os.environ.get('CUDA_VISIBLE_DEVICES', "") != "" and torch.cuda.is_available():
     print 'USING GPU'
     model.cuda()  # use gpu
 else:
@@ -106,7 +106,7 @@ for img_name in tqdm.tqdm(input_files):
         inputs = torch.cat(img_tensors, dim=0)
 
         # .type(...) is for gpu
-        if torch.cuda.is_available():
+        if os.environ.get('CUDA_VISIBLE_DEVICES', "") != "" and torch.cuda.is_available():
             input_img = V(inputs).type(torch.cuda.FloatTensor)
         else:
             input_img = V(inputs).type(torch.FloatTensor)
