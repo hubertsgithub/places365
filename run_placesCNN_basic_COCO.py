@@ -41,7 +41,7 @@ model.load_state_dict(state_dict)
 model.eval()
 
 # Check if GPUs are available
-if torch.cuda.is_available()
+if os.envinron.get('CUDA_VISIBLE_DEVICES', "") != "" and torch.cuda.is_available():
     print 'USING GPU'
     model.cuda()  # use gpu
 else:
