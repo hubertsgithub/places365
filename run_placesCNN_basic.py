@@ -11,8 +11,10 @@ from torch.nn import functional as F
 import os
 from PIL import Image
 
+print torch.cuda.is_available()
+
 # th architecture to use
-arch = 'resnet18'
+arch = 'resnet50'
 
 # load the pre-trained weights
 model_file = '%s_places365.pth.tar' % arch
@@ -25,7 +27,7 @@ checkpoint = torch.load(model_file, map_location=lambda storage, loc: storage)
 state_dict = {str.replace(k,'module.',''): v for k,v in checkpoint['state_dict'].items()}
 model.load_state_dict(state_dict)
 model.eval()
-
+model.cuda()
 
 # load the image transformer
 centre_crop = trn.Compose([
@@ -53,7 +55,7 @@ if not os.access(img_name, os.W_OK):
     os.system('wget ' + img_url)
 
 img = Image.open(img_name)
-input_img = V(centre_crop(img).unsqueeze(0))
+input_img = V(centre_crop(img).unsqueeze(0)).type(torch.cuda.FloatTensor)
 
 # forward pass
 logit = model.forward(input_img)
